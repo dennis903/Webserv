@@ -1,6 +1,6 @@
 #include "ServerConfig.hpp"
 
-ServerConfig::ServerConfig()
+ServerConfig::ServerConfig() : max_body_size(0)
 {
 }
 
@@ -13,9 +13,10 @@ bool	ServerConfig::isValidDirective(std::string temp)
 	if (!temp.compare("listen") ||
 		!temp.compare("location") ||
 		!temp.compare("root") ||
-		!temp.compare("method") ||
+		!temp.compare("methods") ||
 		!temp.compare("index") ||
-		!temp.compare("server_name"))
+		!temp.compare("server_name") ||
+		!temp.compare("client_max_body_size"))
 		return (true);
 	else
 		return (false);
@@ -43,12 +44,14 @@ void	ServerConfig::getDirective(std::vector<std::string>::iterator &it)
 		this->parseLocations(++it);
 	else if (!temp.compare("root"))
 		this->parseRoot(++it);
-	else if (!temp.compare("method"))
+	else if (!temp.compare("methods"))
 		this->parseMethod(++it);
 	else if (!temp.compare("index"))
 		this->parseIndex(++it);
 	else if (!temp.compare("server_name"))
 		this->parseServerName(++it);
+	else if (!temp.compare("client_max_body_size"))
+		this->parseClientMaxBodySize(++it);
 }
 
 void	ServerConfig::parseListen(std::vector<std::string>::iterator &it)
@@ -66,10 +69,10 @@ void	ServerConfig::parseLocations(std::vector<std::string>::iterator &it)
 	ServerConfig loc;
 
 	loc = *this;
-	loc.loopLocation(it, loc);
+	loc.loopLocation(it, this->locations);
 }
 
-void	ServerConfig::loopLocation(std::vector<std::string>::iterator &it, ServerConfig &loc)
+void	ServerConfig::loopLocation(std::vector<std::string>::iterator &it, std::vector<ServerConfig> &locations)
 {
 	this->uri = *it++;
 	// if (*it != "{")
@@ -79,7 +82,7 @@ void	ServerConfig::loopLocation(std::vector<std::string>::iterator &it, ServerCo
 		if (isValidDirective(*it))
 			getDirective(it);
 	}
-	locations.push_back(loc);
+	locations.push_back(*this);
 }
 
 void	ServerConfig::parseRoot(std::vector<std::string>::iterator &it)
@@ -106,8 +109,6 @@ void	ServerConfig::parseMethod(std::vector<std::string>::iterator &it)
 		{
 			this->method.push_back(temp);
 			it++;
-			if (*it == ";")
-				it++;
 			break ;
 		}
 		it++;
@@ -116,7 +117,6 @@ void	ServerConfig::parseMethod(std::vector<std::string>::iterator &it)
 
 void	ServerConfig::parseIndex(std::vector<std::string>::iterator &it)
 {
-	std::cout << *it << std::endl;
 	while (*it != ";")
 		this->index.push_back(*it++);
 }
@@ -127,9 +127,59 @@ void	ServerConfig::parseServerName(std::vector<std::string>::iterator &it)
 		ServerName.push_back(*it++);
 }
 
+void	ServerConfig::parseClientMaxBodySize(std::vector<std::string>::iterator &it)
+{
+	this->max_body_size = ft::stoi(*it++);
+}
+
 int	ServerConfig::getID() const
 {
 	return (this->id);
+}
+
+std::string ServerConfig::getListen() const
+{
+	return (this->listen);
+}
+
+std::vector<ServerConfig> ServerConfig::getLocations() const
+{
+	return (this->locations);
+}
+
+std::string ServerConfig::getRoot() const
+{
+	return (this->root);
+}
+
+std::string ServerConfig::getError() const
+{
+	return (this->error);
+}
+
+std::vector<std::string> ServerConfig::getMethod() const
+{
+	return (this->method);
+}
+
+std::vector<std::string> ServerConfig::getIndex() const
+{
+	return (this->index);
+}
+
+std::vector<std::string> ServerConfig::getServerName() const
+{
+	return (this->ServerName);
+}
+
+std::string		ServerConfig::getUri() const
+{
+	return (this->uri);
+}
+
+size_t	ServerConfig::getClientMaxBodySize() const
+{
+	return (this->max_body_size);
 }
 
 void	ServerConfig::setID(int _id)

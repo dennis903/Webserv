@@ -6,5 +6,6 @@
 namespace ft
 {
 	std::string		getline(std::string &str1);
+	size_t			stoi(std::string &str);
 }
 #endif
