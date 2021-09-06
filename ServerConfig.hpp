@@ -21,6 +21,7 @@ class	ServerConfig
 		std::vector<std::string> index;
 		std::vector<std::string> ServerName;
 		std::string uri;
+
 	public:
 		ServerConfig();
 		~ServerConfig();
