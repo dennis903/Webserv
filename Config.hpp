@@ -18,5 +18,6 @@ class Config
 
 		void	tokenize(std::string &buffer);
 		void	parseConfig(char *file);
+		std::vector<ServerConfig> getServers() const;
 };
 #endif

@@ -63,70 +63,68 @@ void	ServerConfig::parseListen(std::vector<std::string>::iterator &it)
 
 void	ServerConfig::parseLocations(std::vector<std::string>::iterator &it)
 {
-	std::cout << loc.getID() << std::endl;
-	// ServerConfig loc;
+	ServerConfig loc;
 
-	// loc = *this;
-	// loc.loopLocation(it, loc);
+	loc = *this;
+	loc.loopLocation(it, loc);
 }
 
 void	ServerConfig::loopLocation(std::vector<std::string>::iterator &it, ServerConfig &loc)
 {
-	// this->uri = *it++;
-	// // if (*it != "{")
-	// // 	error
-	// while (*(++it) != "}")
-	// {
-	// 	if (isValidDirective(*it))
-	// 		getDirective(it);
-	// }
-	// locations.push_back(loc);
+	this->uri = *it++;
+	// if (*it != "{")
+	// 	error
+	while (*(++it) != "}")
+	{
+		if (isValidDirective(*it))
+			getDirective(it);
+	}
+	locations.push_back(loc);
 }
 
 void	ServerConfig::parseRoot(std::vector<std::string>::iterator &it)
 {
-	// std::string temp = *it;
+	std::string temp = *it;
 
-	// this->root = temp;
-	// it++;
-	// if (*it == ";")
-	// 	it++;
+	this->root = temp;
+	it++;
 }
 
 void	ServerConfig::parseMethod(std::vector<std::string>::iterator &it)
 {
-	// std::string temp;
+	std::string temp;
 
-	// while (1)
-	// {
-	// 	temp = *it;
-	// 	if (temp.find(',', temp.length() - 1) != std::string::npos)
-	// 	{
-	// 		temp.erase(temp.length() - 1);
-	// 		this->method.push_back(temp);
-	// 	}
-	// 	else if (temp.find(',', temp.length() - 1) == std::string::npos)
-	// 	{
-	// 		this->method.push_back(temp);
-	// 		it++;
-	// 		if (*it == ";")
-	// 			it++;
-	// 		break ;
-	// 	}
-	// 	it++;
-	// }
+	while (1)
+	{
+		temp = *it;
+		if (temp.find(',', temp.length() - 1) != std::string::npos)
+		{
+			temp.erase(temp.length() - 1);
+			this->method.push_back(temp);
+		}
+		else if (temp.find(',', temp.length() - 1) == std::string::npos)
+		{
+			this->method.push_back(temp);
+			it++;
+			if (*it == ";")
+				it++;
+			break ;
+		}
+		it++;
+	}
 }
 
 void	ServerConfig::parseIndex(std::vector<std::string>::iterator &it)
 {
-	// while (*it != ";")
-	// 	this->index.push_back(*it++);
+	std::cout << *it << std::endl;
+	while (*it != ";")
+		this->index.push_back(*it++);
 }
 
 void	ServerConfig::parseServerName(std::vector<std::string>::iterator &it)
 {
-	// while (*it != ";")
-	// 	ServerName.push_back(*it++);
+	while (*it != ";")
+		ServerName.push_back(*it++);
 }
 
 int	ServerConfig::getID() const

@@ -79,3 +79,8 @@ void				Config::tokenize(std::string &buffer)
 		}
 	}
 }
+
+std::vector<ServerConfig> Config::getServers() const
+{
+	return (this->servers);
+}
